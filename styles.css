@@ -1,0 +1,68 @@
+body {
+    background-color: rgb(50, 21, 83);
+    text-align: center;
+}
+
+.titleBar {
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 35px;
+    color: aliceblue;
+}
+.titleBar p {
+    font-style: italic;
+}
+
+.playerTile {
+    width: 450px;
+    height: 450px;
+    background-color: rgb(156, 126, 190);   
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.playerTile:hover {
+    box-shadow: 0 0 5px #ffffff;
+}
+
+.playerPhoto {
+    background-color: rgb(206, 183, 233);
+    display: inline-block;
+    width: auto;
+    height: 70%;
+    margin: 8px;
+    aspect-ratio: 1;
+}
+
+.playerText {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 30%;
+    width: auto;
+    text-align: left;
+}
+
+h3 {
+    text-align: left;
+    height: auto;
+    font-size: 48px;
+    margin: 8px;
+    margin-top: 3px;
+    color: rgb(41, 40, 40);
+}
+
+h4 {
+    text-align: left;
+    height: auto;
+    font-size: 40px;
+    margin: 8px;
+    color: rgb(90, 85, 85);
+    font-style: italic;
+}
+
+img {
+    object-fit: cover;
+    aspect-ratio: 1;
+    height: 100%;   
+    width: 100%;
+}
