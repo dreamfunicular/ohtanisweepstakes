@@ -3,42 +3,37 @@ import requests
 from bs4 import BeautifulSoup as bs
 import os
 import re
-
-# Main, endless loop
-
-    # Every 10 executions, pull from ESPN API (Regular update condition)
-
-    # Every execution, check page visit statistics.
-    # If page visits have increased by 1000% from the average of the previous three minutes, pull from ESPN API (Spike condition)
-
-
-    # Sleep for 1 minute.
-
-# If the program pulled from the ESPN MLB News API
-   # For each article pulled from the API
-        # For each shortlisted player
-        # If an article uses the name of a shortlisted player in its headline and that article is not in the list of read articles:
-            # Download the article
-            # Feed the article to ChatGPT, alongside a prompt asking whether the article confirms that the player has signed with any team.
-
-            # Process ChatGPT's response. 
-            # If ChatGPT says yes, ask ChatGPT to which team the player has signed.
-            # Based on ChatGPT's response, update the page to include the team to which a player has signed besides that player's name.
-            # Remove the player's name from the shortlist
-
-        # Add the article to the list of read articles, so it will not be parsed again.
+import time
+import openai
 
 def queryChatGPT(player, articleLink):
+    
     print(player, articleLink)
     return "New York Mets"
 
-def updatePlayer(player, newTeam):
+def updatePlayerStatusInFiles(player, newTeam):
     base=os.path.dirname(os.path.abspath("../html/index.html"))
-    html=open(os.path.join(base, "../html/index.html"))
-    soup=bs(html, "../html/index.html")
+    html=open(os.path.join(base, "index.html"))
 
+    soup=bs(html, "html.parser")
 
-updatePlayer("ohtani", "Toronto Blue Jays")
+    old_text=soup.find('h4', {'id':(player + 'Status')})
+    new_text=old_text.find(text=re.compile("Unsigned")).replace_with(newTeam)
+
+    with open("../html/index.html", "wb") as f_output:
+        f_output.write(soup.prettify("utf-8"))
+    
+    with open("watchedPlayers.json", "r+") as playersFile:
+        players = json.load(playersFile)
+
+        for i in range(len(players)):
+            if players[i] == player:
+                del players[i]
+                break
+                
+        playersFile.seek(0)
+        playersFile.truncate()
+        json.dump(players, playersFile)    
 
 def pullNews(watchedPlayers):
     espnAPIText = ""
@@ -47,6 +42,7 @@ def pullNews(watchedPlayers):
         if espnAPIText.status_code == 200:
             break
         if i == 2:
+            print("Error: Status code is", espnAPIText.status_code)
             return
 
     espnAPIDict = espnAPIText.json()
@@ -54,9 +50,24 @@ def pullNews(watchedPlayers):
     for article in espnAPIDict["articles"]:
         for player in watchedPlayers:
             if player in article["description"]:
+                print("There's news on " + player + "!")
                 newTeam = queryChatGPT(player, article["links"]["api"]["news"]["href"])
                 
                 if newTeam != "":
-                    updatePlayer(player, newTeam)
+                    print(player + " is joining " + newTeam + "!")
+                    updatePlayerStatusInFiles(player, newTeam)
 
-# pullNews(["Chourio"])
+"""while (True):
+    watchedPlayersFile = open("./watchedPlayers.json", "r")
+    watchedPlayers = json.load(watchedPlayersFile)
+    watchedPlayersFile.close()
+
+    pullNews(watchedPlayers)
+
+    time.sleep(60)"""
+
+openai.api_key = os.getenv("OPENAI_KEY")
+response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role":"user", "content":"What color is the sky?"}])
+print("Hello!")
+print(response["choices"][0]["message"]["content"])
+# queryChatGPT("chourio", )
