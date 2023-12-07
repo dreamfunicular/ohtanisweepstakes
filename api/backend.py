@@ -4,9 +4,17 @@ from bs4 import BeautifulSoup as bs
 import os
 import re
 import time
-import openai
+from openai import OpenAI
+from dotenv import load_dotenv
+
 
 def queryChatGPT(player, articleLink):
+    articleText = ""
+    
+
+    prompt = "Yes or no: does the following text describe either that " + player + " has announced a definitive agreement to join a team, or that a team has announced a definitive agreement to sign " + player + "? Respond \"No\" if the news of the agreement is not from the team or player themselves, but rather from sources outside of the player or team.\n\n" + articleText
+    # response = client.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role":"user", prompt : prompt}])
+    # print(response["choices"][0]["message"]["content"])
     
     print(player, articleLink)
     return "New York Mets"
@@ -59,15 +67,16 @@ def pullNews(watchedPlayers):
 
 """while (True):
     watchedPlayersFile = open("./watchedPlayers.json", "r")
-    watchedPlayers = json.load(watchedPlayersFile)
+    watchedPlayers = json.load(watchedPlayersFile)[
     watchedPlayersFile.close()
 
     pullNews(watchedPlayers)
 
     time.sleep(60)"""
 
-openai.api_key = os.getenv("OPENAI_KEY")
-response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role":"user", "content":"What color is the sky?"}])
-print("Hello!")
-print(response["choices"][0]["message"]["content"])
-# queryChatGPT("chourio", )
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
+print("Hello")
+response = client.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role":"user", "content" : "What were the primary causes of the American Revolution?"}])
+print(type(response))
+print(response.choices[0].message.content)
