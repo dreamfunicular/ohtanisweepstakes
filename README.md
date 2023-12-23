@@ -1,22 +1,19 @@
 # Ohtani Sweepstakes Site
 ## by Anna Hope Lynch
 
-The Ohtani Sweepstakes (hasohtanisignedyet.com) app is an AI-powered static website that displays major MLB signing contests, including, prominently, that for Los Angeles Angels Pitcher and Designated Hitter Shohei Ohtani. The site uses a simple layout, describing whether each player has been signed yet and, if so, displaying a link to an ESPN article describing the signing and displaying an AI-generated image of that player in the uniform of the team to which they signed, at that team's ballpark. 
+The Ohtani Sweepstakes (hasohtanisignedyet.com) app is a website that displays major MLB signing contests, including, prominently, that for Los Angeles Angels Pitcher and Designated Hitter Shohei Ohtani. The site uses a simple layout, describing whether each player has been signed yet and, if so, displaying a link to an ESPN article describing the signing and displaying an AI-generated image of that player in the uniform of the team to which they signed, at that team's ballpark. The site uses the MLB and OpenAI API to determine signing news. 
 
-Every 10 minutes, or whenever traffic increases by 1000% in the span of one minute, a program on the server makes a request to the ESPN MLB API. It then scans the recent articles for any containing "Ohtani" in their headlines. If it finds an article, it will prompt the ChatGPT API whether that article confirms Ohtani's signing. If so, the program will initiate the update process.
+Every 3 minutes, a program on the server makes a request to the ESPN MLB API. It then scans the recent articles for any containing "Ohtani" in their headlines. If it finds an article, it will prompt the ChatGPT API whether that article confirms Ohtani's signing. If so, the program will initiate the update process.
 
 ### Workflow Process
 
 1. Request ESPN MLB News API
 2. Scan ESPN MLB News API response for posts with the name of any shortlisted player in the headline
-3. For each article with the name of a shortlisted player in the headline, prompt the ChatGPT API to determine whether the article confirms each player has signed with any specific team.
-4. If the ChatGPT API states that the article confirms with a team, ask it with which team that player has signed.
-5. Update the static site HTML to change the player's status to SIGNED TO <TEAM> with an <a> tag linking to the appropriate article.
-6. Prompt the DALL-E 2 API to generate an image of the player in the uniform of the team to which they have signed at that team's ballpark.
-7. Download the generated image and replace the profile of that player with that image in the static site page.
-8. Send an e-mail to the site administrator indicating the change has been made.
-9. Remove the name of the player from the shortlist.
-10. Return to sleep.
+3. For each article with the name of a shortlisted player in the headline, prompt the ChatGPT API to determine whether the article confirms each player has signed with any specific team, and, if so, which.
+4. Parse the response from ChatGPT, using liberal testing to determine if the AI has hallucinated something.
+5. If a trade was detected, the stie updates the static site HTML to change the player's status to the name of the team with which they will be playing.
+6. Remove the name of the player from the shortlist.
+7. Return to sleep.
 
 ### License
 

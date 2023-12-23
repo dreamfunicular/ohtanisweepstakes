@@ -139,4 +139,4 @@ while (True):
 
     pullNews(watchedPlayers, readArticles)
 
-    time.sleep(180)
+    time.sleep(60)
