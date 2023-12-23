@@ -1,7 +1,7 @@
 # Ohtani Sweepstakes Site
 ## by Anna Hope Lynch
 
-The Ohtani Sweepstakes (hasohtanisignedyet.com) app is a website that displays major MLB signing contests, including, prominently, that for Los Angeles Angels Pitcher and Designated Hitter Shohei Ohtani. The site uses a simple layout, describing whether each player has been signed yet and, if so, displaying a link to an ESPN article describing the signing and displaying an AI-generated image of that player in the uniform of the team to which they signed, at that team's ballpark. The site uses the MLB and OpenAI API to determine signing news. 
+The Ohtani Sweepstakes (hasohtanisignedyet.com) app is a website that displays major MLB signing contests, including, prominently, that for Los Angeles Angels Pitcher and Designated Hitter Shohei Ohtani. The site uses a simple layout, describing whether each player has been signed yet and, if so, displaying the team to which they have signed. The site uses the MLB and OpenAI API to determine signing news. 
 
 Every 3 minutes, a program on the server makes a request to the ESPN MLB API. It then scans the recent articles for any containing "Ohtani" in their headlines. If it finds an article, it will prompt the ChatGPT API whether that article confirms Ohtani's signing. If so, the program will initiate the update process.
 
